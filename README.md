@@ -1,7 +1,7 @@
 # A feladat kiírása
 
 ```
-[soap producers] ----ssl ---> [soap proxy] ---- https ---> [3rd party clients(curl)]
+[soap producers] ---- ssl ---> [soap proxy] ---- https ---> [3rd party clients(curl)]
 ```
  
 A feladat hogy létre kell hozni:
@@ -21,57 +21,57 @@ A feladat hogy létre kell hozni:
 # Megvalósítás
 
 Általában egy kiírás meghatározza a domain-t amivel foglakozik a projekt, ez 
-most ennél általánosab megfogalmazás, így nekem kellett meghatározni ezt. Én – 
-nem túl fantázia dúsan – azt választottam a producerek gyümölcsöt termesztenek, 
+most ennél általánosabb megfogalmazás, így nekem kellett meghatározni ezt. Azt 
+választottam – nem túl fantáziadúsan – a producerek gyümölcsöt termesztenek, 
 a proxy pedig egy piac, igy a kliens számára a következő műveletek adódnak:
 
-1. Kik vannak a piacon? A kérés a paraméter nélköli `listProducersRequest`. 
+1. Kik vannak a piacon? A kérés a paraméter nélküli `listProducersRequest`. 
 Válaszként a `listProducersResponse`-ban egy guid listát kapunk.
-2. Mit árul egy őstermelő? A kérés a paraméter nélköli `listFruitsRequest`. 
+2. Mit árul egy őstermelő? A kérés a paraméter nélküli `listFruitsRequest`. 
 Válaszként a  `listFruitsResponse`-ban termények nevét és azok árát 
 kapjuk egy listában.
-3. Vásárolunk valamit. A kérés a `buyFruitRequest` egy termény nevét, és 
-mennyiségét adhatjuk meg. A válasz megmondja hogy sikeres volt-e a vásárlás, 
-illetve megkapjuk miből hányat, mennyiért veszünk.
+3. Vásárolunk valamit. A kérést a `buyFruitRequest`-ben adjuk meg, ahol egy 
+termény nevét, és mennyiségét adhatjuk meg. A válasz megmondja hogy sikeres 
+volt-e a vásárlás, illetve megkapjuk miből hányat, mennyiért veszünk.
 
 A renszer folyamatábrája:
 
 ![folyamat](docs/sequence.svg)
 
-Az alkalmazást java 17 altt írtam.
+Az alkalmazást java 17 alatt írtam.
 
 # Fordítás és Telepítés
 
-Telepíteni a `root` mappéban kiadott következő utasítással lehet:
+Telepíteni a `root` mappában kiadott következő utasítással lehet:
 ```
 mvn clean install
 ```
 
 # Futtatás
 
-Szintén a `root` mappában kel kiadni a következő utasításokat.
+Szintén a `root` mappában kell kiadni a következő utasításokat.
 
 ## Proxy
 
-Először a proxit kel fiuttatni:
+Először a proxy-t kell fiuttatni:
 
 ```
 java -jar proxy\target\proxy-1.0-SNAPSHOT.jar
 ```
 
-Ez két webes porot használ: http://localhost:8080, https://localhost:8433. 
-Ezeken a /ws pathon lehet elérni a sopa szervert.
+Ez két webes portot használ: http://localhost:8080, https://localhost:8433. 
+Ezeken a /ws pathon lehet elérni a SOAP szervert.
 
 A wsdl a [https://localhost:8443/ws/farmer.wsdl](https://localhost:8443/ws/farmer.wsdl) linken érhető el.
 A xsd a [https://localhost:8443/farmer/model/farmer.xsd](https://localhost:8443/farmer/model/farmer.xsd) linken.
 
-Illetve a 9007 porton várja a bejövő ssl kapcsolatokat a proderektől.
+Illetve a 9007 porton várja a bejövő ssl kapcsolatokat a producerektől.
 
 ## Producer
 
-Megaszabható a `-granary.json` argumentummal, hogy mit termeljen, ebből 
-készítettem két pélga json-t a producer mappába. A paraméter elhagyása, vagy 
-hiva esetén default értéket vesz fel.
+Megszabható a `-granary.json` argumentummal, hogy mit termeljen, ebből 
+készítettem két példa json-t a producer mappába. A paraméter elhagyása, vagy 
+hiba esetén default értéket vesz fel.
 
 ```sh
 java -jar producer\target\producer-1.0-SNAPSHOT.jar
@@ -87,10 +87,10 @@ java -jar producer\target\producer-1.0-SNAPSHOT.jar -granary.json=producer\grana
 
 ## Client
 
-A client nevü mappába összegyüjtöttem néhány file-t, hogy könnyebb legyen a 
+A `client` nevű mappába összegyűjtöttem néhány file-t, hogy könnyebb legyen a 
 tesztelés.
 
-(Amíg a java-s utasításoknál windowsos irányba ált a slesh „\” a curl esetén linuxos irányba áll „/”))
+(Amíg a java-s utasításoknál windows-os irányba állt a slesh „\” a curl esetén linuxos irányba áll „/”))
 
 ### Az aktív producerek listája
 
@@ -115,7 +115,7 @@ A válasz (beautifier után)
 
 ### Termékek listája
 
-A producerek között a `X-Producer-GUID` headerrel lehet választani.
+A producerek között a `X-Producer-GUID` header-rel lehet választani.
 
 ```sh
 curl --header "content-type: text/xml" -H "X-Producer-GUID: 04119f4f-ad81-4d3c-bb1a-caeb846be5e4" -d @client/2_listFruitsRequest.xml https://localhost:8443/ws --cacert client/localhost.crt
