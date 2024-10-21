@@ -1,0 +1,39 @@
+@startuml
+
+
+Producer -> Proxy: getGUIDRequest
+activate Proxy
+Proxy--> Producer: getGUIDResponse
+deactivate Proxy
+
+Client -> Proxy: listProducersRequest
+activate Proxy
+Proxy --> Client : listProducersResponse
+deactivate Proxy
+
+
+Client -> Proxy: listFruitsRequest
+activate Proxy
+
+Proxy-> Producer : listFruitsRequest
+activate Producer
+Proxy <-- Producer : listFruitsResponse
+deactivate Producer
+
+Proxy --> Client : listFruitsResponse
+deactivate Proxy
+
+
+Client -> Proxy: buyFruitRequest
+activate Proxy
+
+Proxy-> Producer : buyFruitRequest
+activate Producer
+Proxy <-- Producer : buyFruitResponse
+deactivate Producer
+
+Proxy --> Client : buyFruitResponse
+deactivate Proxy
+
+
+@enduml

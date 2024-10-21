@@ -1,0 +1,7 @@
+<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+                   xmlns:ns2="http://bbox.riean.hu/farmer/model">
+    <SOAP-ENV:Header/>
+    <SOAP-ENV:Body>
+        <ns2:listFruitsRequest/>
+    </SOAP-ENV:Body>
+</SOAP-ENV:Envelope>

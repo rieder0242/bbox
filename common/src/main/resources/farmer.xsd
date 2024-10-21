@@ -1,0 +1,85 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           xmlns:tns="http://bbox.riean.hu/farmer/model"
+           targetNamespace="http://bbox.riean.hu/farmer/model" elementFormDefault="qualified">
+
+    
+    <!-- get guid -->
+    <xs:element name="getGUIDRequest">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="getGUIDResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="guid" type="tns:GUID"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:simpleType  name="GUID">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12})|(\{[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\})"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- list producers -->
+    <xs:element name="listProducersRequest">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="listProducersResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="producers" type="tns:GUID" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element> 
+   
+    <!-- list fruits -->
+    <xs:element name="listFruitsRequest">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="listFruitsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="fruit" maxOccurs="unbounded" minOccurs="0">
+                    <xs:complexType>
+                        <xs:sequence>
+                            <xs:element type="xs:string" name="name"/>
+                            <xs:element type="xs:int" name="price"/>
+                        </xs:sequence>
+                    </xs:complexType>
+                </xs:element>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    
+    <!-- buy fruit -->
+    <xs:element name="buyFruitRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:string" name="name"/>
+                <xs:element type="xs:int" name="quantity"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="buyFruitResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element type="xs:boolean" name="success"/>
+                <xs:element type="xs:string" name="name"/>
+                <xs:element type="xs:int" name="quantity"/>
+                <xs:element type="xs:int" name="price"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+   
+    <!-- list ping -->
+    <xs:element name="ping">
+        <xs:complexType/>
+    </xs:element>
+    <xs:element name="pong">
+        <xs:complexType/>
+    </xs:element>
+            
+
+     
+</xs:schema> 
